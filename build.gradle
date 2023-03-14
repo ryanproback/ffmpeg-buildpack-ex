@@ -30,3 +30,17 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar {
+    from 'Aptfile'
+}
+
+bootBuildImage {
+    runImage = 'paketobuildpacks/run:full-cnb'
+    imageName = "nbiosupr/${project.name}:latest"
+    environment = [
+            "BPE_APPEND_LD_LIBRARY_PATH" : ":/layers/fagiani_apt/apt/usr/lib/x86_64-linux-gnu/pulseaudio"
+    ]
+    buildpacks = ["ghcr.io/fagiani/buildpacks/fagiani_apt:0.2.5", 'gcr.io/paketo-buildpacks/environment-variables'
+                  ,'gcr.io/paketo-buildpacks/azul-zulu:latest', 'paketo-buildpacks/java']
+}
